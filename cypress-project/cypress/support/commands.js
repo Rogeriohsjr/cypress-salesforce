@@ -1,25 +1,50 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add("loginIntoSalesforce", () => {
+  const sfLoginType = Cypress.env("sf_loginType");
+  if (sfLoginType == "SOAP") {
+    cy.log("Login into Salesforce using SOAP.");
+    cy.salesforceLoginSOAP();
+  } else if (sfLoginType == "SessionId") {
+    cy.log("Login into Salesforce using Session Id.");
+    cy.salesforceLoginManualSessionId();
+  } else {
+    cy.log("Login Type not Found! Might be localhost?");
+  }
+});
+
+Cypress.Commands.add("salesforceLoginSOAP", () => {
+  cy.readFile("salesforceSoapTestUser.xml").then((requestBody) => {
+    const sfUsername = Cypress.env("sf_username");
+    const sfPassword = Cypress.env("sf_password");
+    const sfInstanceURL = Cypress.env("sf_instanceUrl");
+    const sfCustomDomainURL = Cypress.config("baseUrl");
+
+    cy.request({
+      method: "POST",
+      url: sfInstanceURL + "/services/Soap/u/55.0",
+      headers: {
+        SOAPAction: "abc",
+        ["Content-Type"]: "text/xml",
+      },
+      body: requestBody
+        .replace("[[username]]", sfUsername)
+        .replace("[[passwordAndSecurityToken]]", sfPassword),
+    }).then((response) => {
+      const sessionID = Cypress.$(response.body).find("sessionId").text();
+      cy.log("Test Session", sessionID);
+      cy.visit(sfCustomDomainURL + "/secur/frontdoor.jsp?sid=" + sessionID);
+    });
+  });
+});
+
+Cypress.Commands.add("salesforceLoginManualSessionId", () => {
+  cy.readFile("salesforceSoapTestUser.xml").then((requestBody) => {
+    const sfSessionId = Cypress.env("sf_sessionId");
+    const sfCustomDomainURL = Cypress.config("baseUrl");
+
+    cy.visit(sfCustomDomainURL + "/secur/frontdoor.jsp?sid=" + sfSessionId);
+  });
+});
+
+Cypress.Commands.add("salesforceLoginSFDXScratchOrgs", () => {
+  // Todo.
+});

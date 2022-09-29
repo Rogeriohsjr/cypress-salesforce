@@ -1,0 +1,8 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:partner.soap.sforce.com">
+  <soapenv:Body>
+    <urn:login>
+      <urn:username>[[username]]</urn:username>
+      <urn:password>[[passwordAndSecurityToken]]</urn:password>
+    </urn:login>
+  </soapenv:Body>
+</soapenv:Envelope> 
