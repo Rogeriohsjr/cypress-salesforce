@@ -48,3 +48,23 @@ Cypress.Commands.add("salesforceLoginManualSessionId", () => {
 Cypress.Commands.add("salesforceLoginSFDXScratchOrgs", () => {
   // Todo.
 });
+
+Cypress.Commands.add("getIframe", (iframeSelector) => {
+  return cy
+    .get(iframeSelector, { timeout: 10000 })
+    .should(($iframe) => {
+      expect($iframe.contents().find("body")).to.exist;
+    })
+
+    .then(($iframe) => $iframe.contents().find("body"));
+});
+/*
+
+
+Cypress.Commands.add("getsfc", (pSelector, pOptions) => {
+  if (Cypress.env("envtype") == "salesforce") {
+    return cy.sfIFrame().find(pSelector);
+  } else {
+    return cy.get(pSelector, pOptions);
+  }
+});*/
