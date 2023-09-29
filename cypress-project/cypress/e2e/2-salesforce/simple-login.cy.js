@@ -30,8 +30,16 @@ describe("Salesforce Simple Login", () => {
       .get("@Message")
       .drag("@Here"); // I'm using just the "drag" because I'm' using the "cypress-drag-drop" plugin so, the .drag() command will perform both the drag and drop actions so I just need to specify the destination
 
-    //.get("button[type='button']")
-    //.contains("Save")
-    //.click()
+    //What I tried before (To use this code, on the "commands.js" file, uncomment lines 63 to 65.)
+    //cy.dragAndDrop("@Message", "@Here");
+
+    // With this code, I'm sure that my drag and drop action works. To use it, comment out lines 26 to 34 and uncomment
+    // lines 41 to 46, then in the "commands.js" file, uncomment lines 63 to 65. I sent you a screenshot with the result of lines 41 to 46 on our chat
+    /*cy.getIframe('[title="Surface"]')
+      .wait(5000)
+      .get("button[type='button']")
+      .contains("Save")
+      .as("Save")
+      .dragAndDrop("@Message", "@Save");*/
   });
 });

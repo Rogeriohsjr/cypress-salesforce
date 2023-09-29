@@ -58,13 +58,9 @@ Cypress.Commands.add("getIframe", (iframeSelector) => {
 
     .then(($iframe) => $iframe.contents().find("body"));
 });
-/*
 
-
-Cypress.Commands.add("getsfc", (pSelector, pOptions) => {
-  if (Cypress.env("envtype") == "salesforce") {
-    return cy.sfIFrame().find(pSelector);
-  } else {
-    return cy.get(pSelector, pOptions);
-  }
+//What I tried before
+/*Cypress.Commands.add("dragAndDrop", (source, target) => {
+  cy.get(source).trigger("mousedown", { which: 1 });
+  cy.get(target).trigger("mousemove").trigger("mouseup", { force: true });
 });*/
