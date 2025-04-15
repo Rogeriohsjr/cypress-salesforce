@@ -1,5 +1,13 @@
 {
   "devDependencies": {
     "cypress": "^13.6.3"
+  },
+  "scripts": {
+    "cypress:open": "echo 'Error: BASE_URL not set' && exit 1",
+    "cypress:run": "echo 'Error: BASE_URL not set' && exit 1",
+    "cypress:open:env": "cypress open",
+    "cypress:run:env": "cypress run",
+    "cypress:open:sfdx": "./scripts/run-cypress-sfdx.sh open",
+    "cypress:run:sfdx": "./scripts/run-cypress-sfdx.sh run"
   }
 }

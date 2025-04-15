@@ -6,6 +6,12 @@ Cypress.Commands.add("loginIntoSalesforce", () => {
   } else if (sfLoginType == "SessionId") {
     cy.log("Login into Salesforce using Session Id.");
     cy.salesforceLoginManualSessionId();
+  } else if (sfLoginType == "OAuth") {
+    cy.log("Login into Salesforce using OAuth 2.0 Username-Password flow.");
+    cy.salesforceLoginOAuth();
+  } else if (sfLoginType == "SFDX") {
+    cy.log("Login into Salesforce using SFDX CLI.");
+    cy.salesforceLoginSFDXScratchOrgs();
   } else {
     cy.log("Login Type not Found! Might be localhost?");
   }
@@ -46,5 +52,15 @@ Cypress.Commands.add("salesforceLoginManualSessionId", () => {
 });
 
 Cypress.Commands.add("salesforceLoginSFDXScratchOrgs", () => {
-  // Todo.
+  // Read the token file that was generated before running Cypress
+  cy.readFile("sf-token.json").then((tokenData) => {
+    const accessToken = tokenData.accessToken;
+    const instanceUrl = tokenData.instanceUrl;
+
+    cy.log(`Successfully retrieved access token from file`);
+    cy.log(`Instance URL: ${instanceUrl}`);
+
+    // Use the access token to authenticate via frontdoor.jsp
+    cy.visit(instanceUrl + "/secur/frontdoor.jsp?sid=" + accessToken);
+  });
 });
